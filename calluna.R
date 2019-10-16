@@ -8,3 +8,6 @@ calluna <- calluna %>% mutate(`Site name`= factor(`Site name`,levels = c("TR", "
 
 ggplot(calluna, aes(x = `Site name`, y = `Max hight`)) + 
   geom_boxplot(notch = TRUE)
+
+hightmod <- lm(`Max hight` ~ `Site name`, data = calluna)
+summary(hightmod)
