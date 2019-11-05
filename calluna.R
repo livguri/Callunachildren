@@ -1,8 +1,8 @@
-#load packages
+####load packages####
 library(tidyverse)
 library(lme4)
 
-#load data
+####load data####
 Biomass <- readxl::read_excel("Data/Biomass.xlsx", sheet = "Biomass")
 
 Commongarden0 <- readxl::read_excel("Data/Commongarden.xlsx", sheet = "Commongarden")
@@ -17,6 +17,7 @@ Greenhouse %>% count(Site)
 Commongarden0 %>% count(Site)
 Commongarden0 %>% filter(str_detect(IdNr, "\\D"))
 
+####clean data####
 Commongarden <- Commongarden0 %>% 
   mutate(
     IdNr = as.numeric(IdNr),
@@ -25,10 +26,21 @@ Commongarden <- Commongarden0 %>%
     Block = str_remove(Block, "\\d+"))
 
 Biomass %>% anti_join(Greenhouse, by = c("IdNr"))
+Biomass %>% anti_join(Greenhouse, by = c("IdNr", "Site")) %>% select(IdNr, Site, Block, IdMum)
 Biomass %>% anti_join(Greenhouse, by = c("IdNr", "Site", "Block", "IdMum"))
+
 
 Commongarden %>% anti_join(Greenhouse, by = c("IdNr"))
 Commongarden %>% anti_join(Greenhouse, by = c("IdNr", "Site", "Block", "IdMum"))
+Commongarden %>% anti_join(Greenhouse, by = c("IdNr", "Site"))
+
+Greenhouse %>% anti_join(
+  bind_rows(
+    biomass = Biomass %>% select(IdNr, Site, Block, IdMum),
+    common = Commongarden %>% select(IdNr, Site, Block, IdMum),
+    .id = "dataset"
+  ), by =  c("IdNr", "Site", "Block", "IdMum"))
+
 
 # joining datasets
 calluna <- Greenhouse %>% 
