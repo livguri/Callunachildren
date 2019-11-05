@@ -31,7 +31,7 @@ Biomass %>% anti_join(Greenhouse, by = c("IdNr", "Site", "Block", "IdMum"))
 
 
 Commongarden %>% anti_join(Greenhouse, by = c("IdNr"))
-Commongarden %>% anti_join(Greenhouse, by = c("IdNr", "Site", "Block", "IdMum"))
+Commongarden %>% anti_join(Greenhouse, by = c("IdNr", "Site", "Block", "IdMum")) %>% select(IdNr, Site, Block, IdMum) %>% view()
 Commongarden %>% anti_join(Greenhouse, by = c("IdNr", "Site"))
 
 Greenhouse %>% anti_join(
