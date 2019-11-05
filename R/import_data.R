@@ -11,7 +11,10 @@ import_plan <- drake_plan(
   
   #greenhouse data
   Greenhouse = read_excel(file_in(!!here("Data", "Greenhouse.xlsx")), sheet = "Greenhouse") %>%
-    mutate(Site = toupper(Site)),
+    mutate(
+      Site = toupper(Site), 
+      Hight1.5yr = as.numeric(Hight1.5yr)
+    ),
   
   #site meta data
   meta = read_excel(file_in(!!here("Data", "Metadata.xlsx")), sheet = "Ark1") %>% 
@@ -30,6 +33,11 @@ import_plan <- drake_plan(
     left_join(Biomass, by = c("IdNr", "Site", "Block", "IdMum")) %>% 
     left_join(Commongarden, by = c("IdNr", "Site", "Block", "IdMum")) %>%
     left_join(meta, by = "Site") %>% 
-    mutate(supermum=paste(Site,Block,IdMum))
+    mutate(
+      supermum = paste(Site,Block,IdMum),
+      Site = factor(Site), 
+      Site = fct_reorder(.f = Site, .x = Lat)#sort sites by latitude
+    ) %>% 
+    select(-matches("^\\.\\.\\.\\d+$"))#remove unnamed columns
 )
   
