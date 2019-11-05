@@ -5,7 +5,7 @@ library(lme4)
 #load data
 Biomass <- readxl::read_excel("Data/Biomass.xlsx", sheet = "Biomass")
 
-GreenGarden0 <- readxl::read_excel("Data/GreenGarden.xlsx", sheet = "GreenGarden")
+Commongarden0 <- readxl::read_excel("Data/Commongarden.xlsx", sheet = "Commongarden")
 
 Greenhouse <- readxl::read_excel("Data/Greenhouse.xlsx", sheet = "Greenhouse") %>%
   mutate(Site = toupper(Site))
@@ -14,10 +14,10 @@ Greenhouse <- readxl::read_excel("Data/Greenhouse.xlsx", sheet = "Greenhouse") %
 
 Biomass %>% count(Site)
 Greenhouse %>% count(Site)
-GreenGarden0 %>% count(Site)
-GreenGarden0 %>% filter(str_detect(IdNr, "\\D"))
+Commongarden0 %>% count(Site)
+Commongarden0 %>% filter(str_detect(IdNr, "\\D"))
 
-GreenGarden <- GreenGarden0 %>% 
+Commongarden <- Commongarden0 %>% 
   mutate(
     IdNr = as.numeric(IdNr),
     IdMum = str_remove(Block, "[A-C]"),
@@ -27,13 +27,13 @@ GreenGarden <- GreenGarden0 %>%
 Biomass %>% anti_join(Greenhouse, by = c("IdNr"))
 Biomass %>% anti_join(Greenhouse, by = c("IdNr", "Site", "Block", "IdMum"))
 
-GreenGarden %>% anti_join(Greenhouse, by = c("IdNr"))
-GreenGarden %>% anti_join(Greenhouse, by = c("IdNr", "Site", "Block", "IdMum"))
+Commongarden %>% anti_join(Greenhouse, by = c("IdNr"))
+Commongarden %>% anti_join(Greenhouse, by = c("IdNr", "Site", "Block", "IdMum"))
 
 # joining datasets
 calluna <- Greenhouse %>% 
   left_join(Biomass, by = c("IdNr", "Site", "Block", "IdMum")) %>% 
-  left_join(GreenGarden, by = c("IdNr", "Site", "Block", "IdMum")) %>% 
+  left_join(Commongarden, by = c("IdNr", "Site", "Block", "IdMum")) %>% 
   mutate(supermum=paste(Site,Block,IdMum))
 
 
