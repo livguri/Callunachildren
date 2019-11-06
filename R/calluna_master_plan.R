@@ -9,10 +9,17 @@ library("mapdata")
 source(here("R", "import_data.R"))
 source(here("R", "make_plots.R"))
 
+#### manuscript plan ####
+manuscript_plan <- drake_plan(
+  manuscript = rmarkdown::render(input = knitr_in(!!here("calluna6000.Rmd")))
+)
+
+
 #### combine plans ####
 calluna_plan <- bind_rows(
   import_plan,
-  plot_plan
+  plot_plan, 
+  manuscript_plan
   )
 
 ####configure plan####
