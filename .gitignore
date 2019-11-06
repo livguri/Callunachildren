@@ -40,3 +40,4 @@ rsconnect/
 
 # excel temp files
 *.xlsx#
+.Rproj.user
