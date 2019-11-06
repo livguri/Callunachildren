@@ -1,5 +1,6 @@
 library("drake")
 library("here")
+loadNamespace("visNetwork")
 
 r_make(source = here("R", "calluna_master_plan.R"))
 
