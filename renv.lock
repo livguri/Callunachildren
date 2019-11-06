@@ -296,6 +296,13 @@
       "Repository": "CRAN",
       "Hash": "5132526e7fb28a2c20d1ef443d5c4644"
     },
+    "htmlwidgets": {
+      "Package": "htmlwidgets",
+      "Version": "1.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f2ea129162a975cc3828d56d5270616d"
+    },
     "httr": {
       "Package": "httr",
       "Version": "1.4.1",
@@ -534,6 +541,13 @@
       "Repository": "CRAN",
       "Hash": "d3d55a556f7f2e74f449d6a53b8abf8e"
     },
+    "renv": {
+      "Package": "renv",
+      "Version": "0.8.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0b45cd1dfa978e60de94abd7084079a0"
+    },
     "reprex": {
       "Package": "reprex",
       "Version": "0.3.0",
@@ -687,6 +701,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "1f264fa42320c4f44b1689d89101e823"
+    },
+    "visNetwork": {
+      "Package": "visNetwork",
+      "Version": "2.0.8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c5f1dba5bf63894ac562452f0edb7967"
     },
     "whisker": {
       "Package": "whisker",
