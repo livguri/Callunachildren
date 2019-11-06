@@ -9,6 +9,13 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r site-table}
+readd(meta) %>% 
+  arrange(Lat) %>% 
+  knitr::kable(caption = "Seed source information")
+```
+
+
 
 ```{r site-map, fig.cap = "Site map"}
 readd(site_map)
