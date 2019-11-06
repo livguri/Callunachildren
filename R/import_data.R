@@ -16,7 +16,17 @@ import_plan <- drake_plan(
         IdNr = as.numeric(IdNr),
         IdMum = str_remove(Block, "[A-C]"),
         IdMum = as.numeric(IdMum), 
-        Block = str_remove(Block, "\\d+"))
+        Block = str_remove(Block, "\\d+")) %>% 
+      rename(
+        Flowering12 = `Flowering (yes=1, no=0)`,
+        Dead12 = `Dead (yes=1, no=0)`, 
+        Gone12 = `Gone (yes=1, no=0)`
+        ) %>% 
+      mutate(
+        Flowering12 = Flowering12 == 1,#force TRUE FALSE
+        Dead12 = Dead12 == 1, 
+        Gone12 = Gone12 ==1
+        )
     
     #import garden corrections
     garden_corrections <- read_xlsx(file_in(!!here("Data", "Feil i commongarden.xlsx")), na = "NA") %>% 
