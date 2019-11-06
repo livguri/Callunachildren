@@ -7,7 +7,36 @@ import_plan <- drake_plan(
   Biomass = read_excel(file_in(!!here("Data", "Biomass.xlsx")), sheet = "Biomass"),
   
   #common garden data
-  Commongarden0 = read_excel(file_in(!!here("Data", "Commongarden.xlsx")), sheet = "Commongarden"),
+  Commongarden = {
+    Commongarden <- read_excel(file_in(!!here("Data", "Commongarden.xlsx")), sheet = "Commongarden")
+
+    #clean common garden
+    Commongarden <- Commongarden %>% 
+      mutate(
+        IdNr = as.numeric(IdNr),
+        IdMum = str_remove(Block, "[A-C]"),
+        IdMum = as.numeric(IdMum), 
+        Block = str_remove(Block, "\\d+"))
+    
+    #import garden corrections
+    garden_corrections <- read_xlsx(file_in(!!here("Data", "Feil i commongarden.xlsx")), na = "NA") %>% 
+      select(-matches("\\.\\.\\.\\d+")) %>% 
+      filter(!is.na(IdNr)) %>% 
+      mutate(IdNr_new = as.numeric(IdNr_new))
+    
+    #correct garden meta data        
+    Commongarden <- Commongarden %>% 
+      left_join(garden_corrections, by = c("IdNr", "Site", "Block", "IdMum")) %>% 
+      mutate(
+        IdNr = coalesce(IdNr_new, IdNr),
+        Site = coalesce(Site_new, Site),
+        Block = coalesce(Block_new, Block), 
+        IdMum = coalesce(IdMum_new, IdMum)
+      ) %>% 
+      select(-matches("_new$"))
+    
+      Commongarden
+    },
   
   #greenhouse data
   Greenhouse = read_excel(file_in(!!here("Data", "Greenhouse.xlsx")), sheet = "Greenhouse") %>%
@@ -20,13 +49,6 @@ import_plan <- drake_plan(
   meta = read_excel(file_in(!!here("Data", "Metadata.xlsx")), sheet = "Ark1") %>% 
     mutate_at(vars(Lat:Long), as.numeric),
   
-  ####clean data####
-  Commongarden = Commongarden0 %>% 
-    mutate(
-      IdNr = as.numeric(IdNr),
-      IdMum = str_remove(Block, "[A-C]"),
-      IdMum = as.numeric(IdMum), 
-      Block = str_remove(Block, "\\d+")),
   
   #### join datasets ####
   calluna = Greenhouse %>% 
@@ -41,3 +63,5 @@ import_plan <- drake_plan(
     select(-matches("^\\.\\.\\.\\d+$"))#remove unnamed columns
 )
   
+
+
