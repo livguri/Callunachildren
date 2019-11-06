@@ -37,3 +37,6 @@ rsconnect/
 
 #drake files
 /.drake/
+
+# excel temp files
+*.xlsx#
