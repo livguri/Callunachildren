@@ -1,9 +1,13 @@
 ####load packages####
+library("conflicted")
 library("tidyverse")
+conflict_prefer("filter", "dplyr")
+conflict_prefer("map", "purrr")
 library("drake")
 library("lme4")
 library("here")
 library("mapdata")
+
 
 #### import plans ####
 source(here("R", "import_data.R"))
