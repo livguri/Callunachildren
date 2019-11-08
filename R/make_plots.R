@@ -2,7 +2,7 @@
 
 plot_plan <- drake_plan(
   garden_location = tribble(~Long, ~Lat, ~Site,
-                            5.046309, 61.293201, ""),
+                            5.046309, 61.293201, "Garden"),
   #site map
   site_map = {
     mp <- map_data("worldHires", xlim = c(0, 30), ylim = c(55, 80))
@@ -11,8 +11,9 @@ plot_plan <- drake_plan(
       geom_map(map = mp, data = mp, aes(map_id = region),
               inherit.aes = FALSE, fill = "grey70", colour = "grey60") +
       geom_point() +
-      geom_text(data = garden_location, label="★", family = "HiraKakuPro-W3", colour = "red") +
       geom_text(hjust = 1.2) +
+      geom_text(data = garden_location, label="★", family = "HiraKakuPro-W3", colour = "red") +
+      geom_text(data = garden_location, colour = "red", hjust = -0.2) +
       coord_quickmap() +
       scale_x_continuous(expand = c(0.2, 0)) +
       scale_y_continuous(expand = c(0.1, 0)) +
