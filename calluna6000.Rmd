@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+theme_set(theme_bw())
 ```
 
 ```{r site-table}
@@ -19,5 +20,9 @@ readd(meta) %>%
 
 ```{r site-map, fig.cap = "Site map"}
 readd(site_map)
+```
+
+```{r height2.5-mum, fig.cap = "Height at 2.5 years by mother"}
+readd(height2.5_mum)
 ```
 

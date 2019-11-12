@@ -19,5 +19,15 @@ plot_plan <- drake_plan(
       scale_y_continuous(expand = c(0.1, 0)) +
       labs(x = "°E", y = "°N") +
       theme_bw()
-  }
+  },
+  
+  height2.5_mum = calluna %>% 
+    ggplot(aes(x = block_mum,
+               y = Hight2.5yr, fill = Block)) + 
+    geom_boxplot(show.legend = FALSE) +
+  
+    facet_wrap(~Site, scales = "free_x", nrow = 2) +
+    labs(x = "Mother", y = "Height cm") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+  
 )

@@ -68,7 +68,11 @@ import_plan <- drake_plan(
     mutate(
       supermum = paste(Site,Block,IdMum),
       Site = factor(Site), 
-      Site = fct_reorder(.f = Site, .x = Lat)#sort sites by latitude
+      Site = fct_reorder(.f = Site, .x = Lat), #sort sites by latitude
+      #block_mum for plotting
+      block_mum = paste0(Block,IdMum),
+      block_mum = fct_reorder(.f = block_mum,  IdMum),
+      block_mum = fct_reorder(.f = block_mum, as.numeric(as.factor(Block)))
     ) %>% 
     select(-matches("^\\.\\.\\.\\d+$"))#remove unnamed columns
 )
