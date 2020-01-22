@@ -9,16 +9,16 @@ plot_plan <- drake_plan(
     
     ggplot(meta, aes(x = Long, y = Lat, label = Site)) +
       geom_map(map = mp, data = mp, aes(map_id = region),
-              inherit.aes = FALSE, fill = "grey70", colour = "grey60") +
+              inherit.aes = FALSE, fill = "grey80", colour = "grey70") +
       geom_point() +
       geom_text(hjust = 1.2) +
-      geom_text(data = garden_location, label="★", family = "HiraKakuPro-W3", colour = "red") +
-      geom_text(data = garden_location, colour = "red", hjust = -0.2) +
+      #geom_text(data = garden_location, label="★", family = "HiraKakuPro-W3", colour = "red") +
+      geom_point(data = garden_location, shape = 8, colour = "red") +
+      geom_text(data = garden_location, colour = "red", hjust = -0.1) +
       coord_quickmap() +
       scale_x_continuous(expand = c(0.2, 0)) +
       scale_y_continuous(expand = c(0.1, 0)) +
-      labs(x = "°E", y = "°N") +
-      theme_bw()
+      labs(x = "°E", y = "°N")
   },
   
   height2.5_mum = calluna %>% 
