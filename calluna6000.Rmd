@@ -13,7 +13,7 @@ theme_set(theme_bw())
 ```{r site-table}
 readd(meta) %>% 
   arrange(Lat) %>% 
-  knitr::kable(caption = "Seed source information")
+  knitr::kable(caption = "Seed source information", digits = 2)
 ```
 
 
