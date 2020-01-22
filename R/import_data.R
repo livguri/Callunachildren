@@ -43,7 +43,8 @@ import_plan <- drake_plan(
         Block = coalesce(Block_new, Block), 
         IdMum = coalesce(IdMum_new, IdMum)
       ) %>% 
-      select(-matches("_new$"))
+      select(-matches("_new$")) %>% 
+      mutate(`Max hight` = if_else(`Max hight` > 100, NA_real_, `Max hight`))# max height of 137cm is doubtful, especially given 54/56 cm other heights
     
       Commongarden
     },
