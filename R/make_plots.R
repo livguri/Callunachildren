@@ -28,6 +28,14 @@ plot_plan <- drake_plan(
   
     facet_wrap(~Site, scales = "free_x", nrow = 2) +
     labs(x = "Mother", y = "Height cm") +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)),
+  
+  #mortality
+  mortality_plot = calluna %>% 
+    group_by(Site, supermum) %>% 
+    summarise(prop_alive  = mean(!is.na(Hight2.5yr))) %>% 
+    ggplot(aes(x = Site, y = prop_alive)) +
+    geom_sina() +
+    labs(y = "Proportion alive at 2.5 yr")
   
 )
