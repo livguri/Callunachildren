@@ -41,3 +41,6 @@ rsconnect/
 # excel temp files
 *.xlsx#
 .Rproj.user
+
+# output html files
+*.html
