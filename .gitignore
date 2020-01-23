@@ -42,5 +42,6 @@ rsconnect/
 *.xlsx#
 .Rproj.user
 
-# output html files
+# output files
 *.html
+*.pdf

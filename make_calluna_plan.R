@@ -6,4 +6,4 @@ r_make(source = here("R", "calluna_master_plan.R"))
 
 r_vis_drake_graph(source = here("R", "calluna_master_plan.R"))
 
-browseURL("calluna6000.html")
+fs::file_show("calluna6000.pdf")

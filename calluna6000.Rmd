@@ -1,14 +1,42 @@
 ---
 title: "Calluna 6000"
 author: "Richard J. Telford"
-date: "November 6, 2019"
-output: html_document
+date: "`r Sys.Date()`"
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 theme_set(theme_bw())
 ```
+# Abstract
+
+_Calluna vulgaris_ is widely geographically and environmentally distributed species, keystone species in threatened coastal heathlands. 
+Economically important. Within heathlands; geographic variation in growth, response to fire, resprouting, in seed germination, affects productivity and grazing resources. 
+Management implications for burning rotations. 
+Seedlings are vulnerable to drought; resprouting and growth rate affects ecosystem resilience to drought. 
+There is genetic variation but unclear to what extent that is genetic or plastic response to climate, and translates into growth and demographic variation. 
+To answer this, we did a common garden experiment: 8 populations, XX degree latitudinal gradient, grown in greenhouse for three years, common garden for 7-8 years, measured survival, growth, fertility, then burnt to assess resprouting ability. 
+(resprout as result or as a premise).
+
+## Introduction 
+
+Hypothesis: variation is due to populations being locally adapted (vs null hypothesis of plasticity).
+        Plant growth rate lower in colder-climate populations (chk with litt)
+        More compacts growth forms in the north
+        Earlier sexual recruitment in the north (one mode of reprod. only)
+        Seedling drought etc tolerance higher in the south (i.e., lower mortality) 
+    Figures, tables, tests:
+        Site map with heathland belt and Lygra and Tarva inserted (example plot of vegetative and seed recruitement after e.g., 2 yrs)
+        Growth through life (height~time*pop rand=mother, or a composite; and also report correlation of the size parameters)
+        Growth form through life (#branches/height) form~time*pop rand=mother split inside/out
+        Biomass (simple box plot per pop)
+        Flowering~size*pop logistic
+        Mortailty~size*pop logistic
+        Respouting~pop
+
+
+## Methods
 
 ```{r site-table}
 readd(meta) %>% 
@@ -21,6 +49,9 @@ readd(meta) %>%
 ```{r site-map, fig.cap = "Site map"}
 readd(site_map)
 ```
+
+
+## Results
 
 ```{r height-plot, fig.cap = "Height of _Calluna_ plant by site at different time periods."}
 readd(height_plot)
