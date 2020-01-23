@@ -15,8 +15,6 @@ ggplot(calluna, aes(x = Hight2.5yr, fill = as.factor(Flowering2.5yr))) + geom_ba
 ggplot(calluna, aes(x = Hight1.5yr)) + geom_bar()
 ggplot(calluna, aes(x = Hight8m)) + geom_bar()
 
-
-
 calluna_height_thin <- calluna %>% 
   select(Site, IdNr, matches("^He?ight")) %>%
   select(-`Hight 2`) %>% 
@@ -24,23 +22,31 @@ calluna_height_thin <- calluna %>%
   pivot_longer(matches("^He?ight"), names_to = "time", values_to = "height", names_pattern = "(\\d\\.?\\d?)" ) %>% 
   filter(!is.na(height)) %>%
   group_by(IdNr) %>%
-mutate(time = as.numeric(time), 
-       time = if_else(time == 8, true = 8/12, false = time),
+mutate(time_numeric = as.numeric(time), 
+       time_numeric = if_else(time_numeric == 8, true = 8/12, false = time_numeric),
+       time = case_when(
+         time == 8 ~ "8 months", 
+         time == 1 ~ "1 year", 
+         TRUE ~ paste(time, "years")
+       ),
        delta = height - lag(height)) 
 
 calluna_height_thin %>% 
-  ggplot(aes(x = time, y = delta, group = IdNr)) + 
+  ggplot(aes(x = time_numeric, y = delta, group = IdNr)) + 
   geom_line(alpha = 0.5) +
   facet_wrap(~Site)
 
 calluna_height_thin %>% 
-  ggplot(aes(x = time, y = height, group = IdNr)) + 
+  ggplot(aes(x = time_numeric, y = height, group = IdNr)) + 
   geom_line(alpha = 0.5) +
   facet_wrap(~Site)
 
 calluna_height_thin %>% 
-  ggplot(aes(x = factor(time), y = height, fill = Site)) + 
-  geom_boxplot()
+  ggplot(aes(x = Site, y = height, fill = Site)) + 
+  geom_boxplot(notch = TRUE, show.legend = FALSE) +
+  scale_fill_viridis_d() +
+  labs(x = "Site", y = "Height, cm") +
+  facet_wrap(~ time, scales = "free_y")
 
 calluna %>% 
   select(Site, IdNr, matches("^He?ight"), `Dead12`, `Gone12`) %>% 

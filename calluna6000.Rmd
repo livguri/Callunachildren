@@ -22,6 +22,10 @@ readd(meta) %>%
 readd(site_map)
 ```
 
+```{r height-plot, fig.cap = "Height of _Calluna_ plant by site at different time periods."}
+readd(height_plot)
+```
+
 ```{r height2.5-mum, fig.cap = "Height at 2.5 years by mother"}
 readd(height2.5_mum)
 ```

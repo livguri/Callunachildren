@@ -2,6 +2,7 @@
 library("conflicted")
 library("tidyverse")
 conflict_prefer("filter", "dplyr")
+conflict_prefer("lag", "dplyr")
 conflict_prefer("map", "purrr")
 library("drake")
 library("lme4")

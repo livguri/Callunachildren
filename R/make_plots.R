@@ -36,6 +36,31 @@ plot_plan <- drake_plan(
     summarise(prop_alive  = mean(!is.na(Hight2.5yr))) %>% 
     ggplot(aes(x = Site, y = prop_alive)) +
     geom_sina() +
-    labs(y = "Proportion alive at 2.5 yr")
+    labs(y = "Proportion alive at 2.5 yr"),
   
+ # Height
+ calluna_height_thin = calluna %>% 
+   select(Site, IdNr, matches("^He?ight")) %>%
+   select(-`Hight 2`) %>% 
+   rename(Height12 = `Hight 1`) %>% 
+   pivot_longer(matches("^He?ight"), names_to = "time", values_to = "height", names_pattern = "(\\d\\.?\\d?)" ) %>% 
+   filter(!is.na(height)) %>%
+   group_by(IdNr) %>%
+   mutate(time_numeric = as.numeric(time), 
+          time_numeric = if_else(time_numeric == 8, true = 8/12, false = time_numeric),
+          time = case_when(
+            time == 8 ~ "8 months", 
+            time == 1 ~ "1 year", 
+            TRUE ~ paste(time, "years")
+          ),
+          time = factor(time, levels = c("8 months",  "1 year", "1.5 years", "2.5 years", "3 years", "12 years")),
+          delta = height - lag(height)),
+
+  height_plot = calluna_height_thin %>% 
+     ggplot(aes(x = Site, y = height, fill = Site)) + 
+     geom_boxplot(notch = TRUE, show.legend = FALSE) +
+     scale_fill_viridis_d() +
+     labs(x = "Site", y = "Height, cm") +
+     facet_wrap(~ time, scales = "free_y")
+ 
 )
