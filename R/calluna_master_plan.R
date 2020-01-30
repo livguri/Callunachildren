@@ -9,7 +9,10 @@ library("lme4")
 library("here")
 library("mapdata")
 library("ggforce")
+library("rjtmisc")
 
+#force package required
+requireNamespace("citr")
 
 #### import plans ####
 source(here("R", "import_data.R"))
@@ -17,7 +20,22 @@ source(here("R", "make_plots.R"))
 
 #### manuscript plan ####
 manuscript_plan <- drake_plan(
-  manuscript = rmarkdown::render(input = knitr_in(!!here("calluna6000.Rmd")))
+  
+  #add extra packages to bibliography
+  biblio2 = package_citations(
+    packages = c("tidyverse"), 
+    old_bib = file_in(!!here("extra", "callunaMS.bib")), 
+    new_bib = file_out(!!here("extra", "callunaMS2.bib"))),
+  
+  #render manuscript
+  manuscript = {
+    #force dependancies on csl and bib files
+    file_in(!!here("extra", "elsevier-harvard_rjt.csl"))
+    file_in(!!here("extra", "calluna2.bib"))
+    
+    #render
+    rmarkdown::render(input = knitr_in(!!here("calluna6000.Rmd")))
+    }
 )
 
 

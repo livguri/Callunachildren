@@ -1,8 +1,15 @@
 ---
 title: "Calluna 6000"
 author: "Richard J. Telford"
-date: "`r Sys.Date()`"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+header-includes:
+   - \usepackage{lineno}
+   - \linenumbers
 output: pdf_document
+documentclass: article
+classoption: a4paper
+bibliography: extra/calluna.bib
+csl: extra/elsevier-harvard_rjt.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -27,12 +34,12 @@ Hypothesis: variation is due to populations being locally adapted (vs null hypot
         Earlier sexual recruitment in the north (one mode of reprod. only)
         Seedling drought etc tolerance higher in the south (i.e., lower mortality) 
     Figures, tables, tests:
-        Site map with heathland belt and Lygra and Tarva inserted (example plot of vegetative and seed recruitement after e.g., 2 yrs)
+        Site map with heathland belt and Lygra and Tarva inserted (example plot of vegetative and seed recruitment after e.g., 2 yrs)
         Growth through life (height~time*pop rand=mother, or a composite; and also report correlation of the size parameters)
         Growth form through life (#branches/height) form~time*pop rand=mother split inside/out
         Biomass (simple box plot per pop)
         Flowering~size*pop logistic
-        Mortailty~size*pop logistic
+        Mortality~size*pop logistic
         Respouting~pop
 
 
