@@ -35,8 +35,8 @@ vignettes/*.pdf
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 
-#drake files
-/.drake/
+#target files
+/_targets/
 
 # excel temp files
 *.xlsx#
