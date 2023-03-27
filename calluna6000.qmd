@@ -1,19 +1,61 @@
 ---
-title: "Calluna 6000"
-author: "Richard J. Telford"
-date: "`r format(Sys.Date(), '%d %B %Y')`"
+title: Calluna 6000
+author:
+  - id: aut1
+    name:
+      given: Richard J.
+      family: Telford
+    orcid: 0000-0001-9826-3076
+    email: richard.telford@uib.no
+    affiliations:
+      - ref: aff1
+  - id: aut2
+    name:
+      given: Vigdis
+      family: Vandvik
+    orcid: 0000-0003-4651-4798
+    email: vigdis.vandvik@uib.no
+    affiliations:
+      - ref: aff1
+  - id: aut3
+    name:
+      given: Liv Guri
+      family: Velle
+    orcid: 0000-0003-0433-5337
+    email: liv.guri.velle@moreforsking.no
+    affiliations:
+      - ref: aff2
+  - id: aut4
+    name:
+      given: A. N.
+      family: Other
+    affiliations: []
+date: today
 header-includes:
-   - \usepackage{lineno}
-   - \linenumbers
-output: pdf_document
+  - \usepackage{lineno}
+  - \linenumbers
+format: html
 documentclass: article
 classoption: a4paper
 bibliography: extra/calluna.bib
 csl: extra/elsevier-harvard_rjt.csl
+execute:
+  error: false
+  echo: true
+affiliations:
+  - id: aff1
+    name: Department of Biosciences, University of Bergen, Postbox 7803 N-5020, Bergen,
+      Norway
+  - id: aff2
+    name: 'Møreforsking AS Ålesund: Alesund, Norway'
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```{r}
+#| label: setup
+#| include: false
+library(ggplot2)
+library(dplyr)
+library(targets)
 theme_set(theme_bw())
 ```
 # Abstract
@@ -45,30 +87,61 @@ Hypothesis: variation is due to populations being locally adapted (vs null hypot
 
 ## Methods
 
-```{r site-table}
-readd(meta) %>% 
-  arrange(Lat) %>% 
-  knitr::kable(caption = "Seed source information", digits = 2)
+sites @tbl-sites
+
+```{r}
+#| label: tbl-sites
+#| tbl-cap: "Seed source information"
+tar_read(metadata) |> 
+  arrange(Lat) |> 
+  knitr::kable(digits = 2)
 ```
 
+site map @fig-site-map
 
-
-```{r site-map, fig.cap = "Site map"}
-readd(site_map)
+```{r}
+#| label: fig-site-map
+#| fig.cap: Site map. See @tbl-sites for site codes.
+tar_read(site_map)
 ```
 
 
 ## Results
 
-```{r height-plot, fig.cap = "Height of _Calluna_ plant by site at different time periods."}
-readd(height_plot)
+growth @fig-height-plot
+
+```{r}
+#| label: fig-height-plot
+#| fig.cap: Height of _Calluna_ plant by site at different time periods.
+tar_read(height_plot)
 ```
 
-```{r height2.5-mum, fig.cap = "Height at 2.5 years by mother"}
-readd(height2.5_mum)
+hight by mother @fig-height-25-mum
+
+```{r}
+#| label: fig-height25-mum
+#| fig.cap: Height at 2.5 years by mother
+tar_read(height2.5_mum_plot)
 ```
 
+mortality @fig-mortality-plot
 
-```{r mortality-plot, fig.cap = "Mortality by mother at 2.5 years."}
-readd(mortality_plot)
+```{r}
+#| label: fig-mortality-plot
+#| fig.cap: Mortality by mother at 2.5 years.
+tar_read(mortality_plot)
 ```
+
+# Author Contributions
+
+```{r}
+#| label: author-contributions
+#| output: asis
+library(plume)
+authors <- "authors.csv"
+aut <- PlumeQuarto$new(read.csv(authors))
+
+aut$get_contributions(role_first = TRUE, name_list = TRUE) |> 
+  cat()
+```
+
