@@ -1,5 +1,5 @@
 ---
-title: Calluna 6000
+title: Growth, survival and regeneration of _Calluna vulgaris_ in a common garden
 author:
   - id: aut1
     name:
@@ -34,7 +34,9 @@ date: today
 header-includes:
   - \usepackage{lineno}
   - \linenumbers
-format: html
+format:
+#  html: default
+  pdf: default
 documentclass: article
 classoption: a4paper
 bibliography: extra/calluna.bib
@@ -55,72 +57,99 @@ affiliations:
 #| include: false
 library(ggplot2)
 library(dplyr)
+library(gt)
 library(targets)
 theme_set(theme_bw())
 ```
+
 # Abstract
 
-_Calluna vulgaris_ is widely geographically and environmentally distributed species, keystone species in threatened coastal heathlands. 
-Economically important. Within heathlands; geographic variation in growth, response to fire, resprouting, in seed germination, affects productivity and grazing resources. 
-Management implications for burning rotations. 
-Seedlings are vulnerable to drought; resprouting and growth rate affects ecosystem resilience to drought. 
-There is genetic variation but unclear to what extent that is genetic or plastic response to climate, and translates into growth and demographic variation. 
-To answer this, we did a common garden experiment: 8 populations, XX degree latitudinal gradient, grown in greenhouse for three years, common garden for 7-8 years, measured survival, growth, fertility, then burnt to assess resprouting ability. 
-(resprout as result or as a premise).
+*Calluna vulgaris* is widely geographically and environmentally distributed species, keystone species in threatened coastal heathlands.
+Economically important.
+Within heathlands; geographic variation in growth, response to fire, resprouting, in seed germination, affects productivity and grazing resources.
+Management implications for burning rotations.
+Seedlings are vulnerable to drought; resprouting and growth rate affects ecosystem resilience to drought.
+There is genetic variation but unclear to what extent that is genetic or plastic response to climate, and translates into growth and demographic variation.
+To answer this, we did a common garden experiment: 8 populations, XX degree latitudinal gradient, grown in greenhouse for three years, common garden for 7-8 years, measured survival, growth, fertility, then burnt to assess re-sprouting ability.
 
-## Introduction 
+# Introduction
 
 Hypothesis: variation is due to populations being locally adapted (vs null hypothesis of plasticity).
-        Plant growth rate lower in colder-climate populations (chk with litt)
-        More compacts growth forms in the north
-        Earlier sexual recruitment in the north (one mode of reprod. only)
-        Seedling drought etc tolerance higher in the south (i.e., lower mortality) 
-    Figures, tables, tests:
-        Site map with heathland belt and Lygra and Tarva inserted (example plot of vegetative and seed recruitment after e.g., 2 yrs)
-        Growth through life (height~time*pop rand=mother, or a composite; and also report correlation of the size parameters)
-        Growth form through life (#branches/height) form~time*pop rand=mother split inside/out
-        Biomass (simple box plot per pop)
-        Flowering~size*pop logistic
-        Mortality~size*pop logistic
-        Respouting~pop
+Plant growth rate lower in colder-climate populations (chk with litt) 
+More compacts growth forms in the north Earlier sexual recruitment in the north (one mode of reprod. only)
+Seedling drought etc tolerance higher in the south (i.e., lower mortality)
+Figures, tables, tests: Site map with heathland belt and Lygra and Tarva inserted (example plot of vegetative and seed recruitment after e.g., 2 yrs)
+Growth through life (height\~time\*pop rand=mother, or a composite; and also report correlation of the size parameters) Growth form through life (#branches/height) form\~time\*pop rand=mother split inside/out Biomass (simple box plot per pop) Flowering\~size\*pop logistic Mortality\~size\*pop logistic Respouting\~pop -->
+
+# Methods
+
+_Calluna vulgaris_ seeds were collected from eight sites spanning the latitudinal, and climatic, gradient of Norwegian coastal heathlands in MONTH 20XX (@tbl-sites, @fig-site-map). 
+At each site, ripe seeds were collected from X X plants, spaced at least Xm apart, in X blocks, spaced Xm apart. 
+
+FIELD COLLECTION DETAILS
 
 
-## Methods
 
-sites @tbl-sites
+
 
 ```{r}
 #| label: tbl-sites
-#| tbl-cap: "Seed source information"
+#| tbl-cap: Locations seeds were collect from. GGD5 is growing degrees days above 5°C (@Brun2022; @Brun2022a)
+#| eval: false
+#| include: false
 tar_read(metadata) |> 
-  arrange(Lat) |> 
-  knitr::kable(digits = 2)
+  arrange(desc(Lat)) |> 
+  gt() |> 
+  cols_label(Lat = "Latitude °N", Long = "Longitude °E") |> 
+  fmt_number(c(Lat, Long), decimals = 2)
 ```
-
-site map @fig-site-map
 
 ```{r}
 #| label: fig-site-map
 #| fig.cap: Site map. See @tbl-sites for site codes.
+
 tar_read(site_map)
 ```
 
+GREENHOUSE DETAILS
+X seeds from each maternal plant were sown. 
+Plant height and canopy diameter was measured at XXX XXX months.
+At XX month, one randomly selected individual from each family was harvested and the above ground biomass measured.
 
-## Results
+COMMON GARDEN DETAILS
+After XX years, a random selection of the surviving plants were planted in a common garden.
+Plant height was again measured when the plants were XXX years old.
+
+
+BURNING and RESPROUTING details
+
+In MONTH 20XX the common garden was burned [DETAILS]. 
+We identified plants that had re-sprouted in MONTH 20XX.
+
+
+## Numerical methods
+
+All numerical analyses were done in `r stringr::str_remove(R.version.string, " \\(.*")` [@R2023].
+
+# Results
 
 growth @fig-height-plot
 
 ```{r}
 #| label: fig-height-plot
 #| fig.cap: Height of _Calluna_ plant by site at different time periods.
+#| eval: false
+#| include: false
 tar_read(height_plot)
 ```
 
-hight by mother @fig-height-25-mum
+hight by mother @fig-height25-mum
 
 ```{r}
 #| label: fig-height25-mum
 #| fig.cap: Height at 2.5 years by mother
+#| eval: false
+#| include: false
 tar_read(height2.5_mum_plot)
 ```
 
@@ -129,8 +158,12 @@ mortality @fig-mortality-plot
 ```{r}
 #| label: fig-mortality-plot
 #| fig.cap: Mortality by mother at 2.5 years.
+#| eval: false
+#| include: false
 tar_read(mortality_plot)
 ```
+
+# Discussion
 
 # Author Contributions
 
@@ -145,3 +178,4 @@ aut$get_contributions(role_first = TRUE, name_list = TRUE) |>
   cat()
 ```
 
+# References
