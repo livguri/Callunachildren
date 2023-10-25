@@ -2,82 +2,103 @@
 
 # biomass data
 load_biomass <- function(biomass_data) {
-  read_excel(biomass_data, sheet = "Biomass")
+  read_excel(biomass_data, sheet = "Biomass") |> 
+    janitor::clean_names()
 }
 
 # common garden data
 load_commongarden <- function(commongarden_data, commongarden_corrections_data) {
-  Commongarden <- read_excel(commongarden_data, sheet = "Commongarden")
+  commongarden <- read_excel(commongarden_data, sheet = "Commongarden") |> 
+    janitor::clean_names()
 
   # clean common garden
-  Commongarden <- Commongarden |>
+  commongarden <- commongarden |>
     mutate(
-      IdNr = as.numeric(IdNr),
-      IdMum = str_remove(Block, "[A-C]"),
-      IdMum = as.numeric(IdMum),
-      Block = str_remove(Block, "\\d+")
+      id_nr = as.numeric(id_nr),
+      id_mum = str_remove(block, "[A-C]"),
+      id_mum = as.numeric(id_mum),
+      block = str_remove(block, "\\d+")
     ) |>
     rename(
-      Flowering12 = `Flowering (yes=1, no=0)`,
-      Dead12 = `Dead (yes=1, no=0)`,
-      Gone12 = `Gone (yes=1, no=0)`
+      flowering_12yr = flowering_yes_1_no_0,
+      dead_12yr = dead_yes_1_no_0,
+      gone_12yr = gone_yes_1_no_0,
+      height_max = max_hight,
+      height_1 = hight_1,
+      height_2 = hight_2,
+      height_greening = greening_hight
     ) |>
     mutate(
-      Flowering12 = Flowering12 == 1, # force TRUE FALSE
-      Dead12 = Dead12 == 1,
-      Gone12 = Gone12 == 1
+      Flowering_12yr = flowering_12yr == 1, # force TRUE FALSE
+      Dead_12yr = dead_12yr == 1,
+      Gone_12yr = gone_12yr == 1
     )
 
   # import garden corrections
   garden_corrections <- read_excel(commongarden_corrections_data, na = "NA") |>
     select(-matches("\\.\\.\\.\\d+")) |>
-    filter(!is.na(IdNr)) |>
-    mutate(IdNr_new = as.numeric(IdNr_new))
+    janitor::clean_names() |> 
+    filter(!is.na(id_nr)) |>
+    mutate(id_nr_new = as.numeric(id_nr_new))
 
   # correct garden meta data
-  Commongarden <- Commongarden |>
-    left_join(garden_corrections, by = c("IdNr", "Site", "Block", "IdMum")) |>
+  commongarden <- commongarden |>
+    left_join(garden_corrections, by = c("id_nr", "site", "block", "id_mum")) |>
     mutate(
-      IdNr = coalesce(IdNr_new, IdNr),
-      Site = coalesce(Site_new, Site),
-      Block = coalesce(Block_new, Block),
-      IdMum = coalesce(IdMum_new, IdMum)
+      id_nr = coalesce(id_nr_new, id_nr),
+      site = coalesce(site_new, site),
+      block = coalesce(block_new, block),
+      id_mum = coalesce(id_mum_new, id_mum)
     ) |>
     select(-matches("_new$")) |>
-    mutate(`Max hight` = if_else(`Max hight` > 100, NA_real_, `Max hight`)) # max height of 137cm is doubtful, especially given 54/56 cm other heights
+    
+    mutate(max_hight = if_else(height_max > 100, NA_real_, height_max)) # max height of 137cm is doubtful, especially given 54/56 cm other heights
 
-  Commongarden
+  commongarden
 }
 
 # greenhouse data
 load_greenhouse <- function(greenhouse_data) {
   read_excel(greenhouse_data, sheet = "Greenhouse") |>
+    janitor::clean_names() |> 
+    rename_with(.fn = \(x){str_replace(x, "hight", "height")}, .cols = matches("hight")) |> 
     mutate(
-      Site = toupper(Site),
-      Hight1.5yr = as.numeric(Hight1.5yr)
+      site = toupper(site),
+      height1_5yr = as.numeric(height1_5yr)
     )
 }
 
 # site meta data
-load_metadata <- function(metadata_data) {
-  read_excel(metadata_data, sheet = "Ark1") |>
-    mutate_at(vars(Lat:Long), as.numeric)
+load_metadata <- function(metadata_data, chelsa_gdd5_data) {
+  meta <- read_excel(metadata_data, sheet = "Ark1") |>
+    janitor::clean_names() |> 
+    mutate(
+      across(lat:long, as.numeric),
+      # make site codes A in north
+      code = factor(LETTERS[1:n()]),
+      code = fct_reorder(.f = code, .x = lat, .desc = TRUE)
+      ) 
+  meta_sf <- sf::st_as_sf(meta, coords = c("long", "lat")) 
+  sf::st_crs(meta_sf) <- 4326
+  climate <- terra::rast(chelsa_gdd5_data) |>
+    terra::extract(meta_sf) 
+
+  meta$gdd5 <- pull(climate, stringr::str_replace(basename(chelsa_gdd5_data), "\\.tif", ""))
+  meta
 }
 
 #### join datasets ####
 combine_datasets <- function(greenhouse, biomass, commongarden, metadata) {
   calluna <- greenhouse |>
-    left_join(biomass, by = c("IdNr", "Site", "Block", "IdMum")) |>
-    left_join(commongarden, by = c("IdNr", "Site", "Block", "IdMum")) |>
-    left_join(metadata, by = "Site") |>
+    left_join(biomass, by = c("id_nr", "site", "block", "id_mum")) |>
+    left_join(commongarden, by = c("id_nr", "site", "block", "id_mum")) |>
+    left_join(metadata, by = "site") |>
     mutate(
-      supermum = paste(Site, Block, IdMum),
-      Site = factor(Site),
-      Site = fct_reorder(.f = Site, .x = Lat), # sort sites by latitude
+      supermum = paste(site, block, id_mum, sep = "_"),
       # block_mum for plotting
-      block_mum = paste0(Block, IdMum),
-      block_mum = fct_reorder(.f = block_mum, IdMum),
-      block_mum = fct_reorder(.f = block_mum, as.numeric(as.factor(Block)))
+      block_mum = paste0(block, id_mum),
+      block_mum = fct_reorder(.f = block_mum, id_mum),
+      block_mum = fct_reorder(.f = block_mum, as.numeric(as.factor(block)))
     ) |>
     select(-matches("^\\.\\.\\.\\d+$")) # remove unnamed columns
   calluna
