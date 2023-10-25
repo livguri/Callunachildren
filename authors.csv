@@ -1,5 +1,5 @@
-given_name,family_name,dropping_particle,email,orcid,number,fax,url,affiliation_1,affiliation_2,contribution_1,contribution_2,contribution_3,contribution_4,contribution_5,contribution_6,contribution_7,contribution_8,contribution_9,contribution_10,contribution_11
-Richard J.,Telford,,richard.telford@uib.no,0000-0001-9826-3076,,,,"Department of Biosciences, University of Bergen, Postbox 7803 N-5020, Bergen, Norway",,NA,Methodology ,Formal analysis ,NA,Data Curation ,Writing - Original Draft ,NA,Visualization ,NA,NA,NA
-Vigdis,Vandvik,,vigdis.vandvik@uib.no,0000-0003-4651-4798,,,,"Department of Biosciences, University of Bergen, Postbox 7803 N-5020, Bergen, Norway",,Conceptualization ,Methodology ,NA,,NA,NA,NA,NA,NA,NA,NA
-Liv Guri,Velle,,liv.guri.velle@moreforsking.no,0000-0003-0433-5337,,,,"Møreforsking AS Ålesund: Alesund, Norway",,Conceptualization ,Methodology ,NA,Investigation ,NA,NA,NA,NA,NA,NA,NA
-A. N. ,Other,,,,,,,,,Conceptualization ,Methodology ,Formal analysis ,Investigation ,Data Curation ,Writing - Original Draft ,Writing - Review & Editing ,Visualization ,Supervision ,Project administration ,Funding acquisition 
+given_name,family_name,dropping_particle,email,orcid,number,fax,url,affiliation_1,affiliation_2,conceptualization,methodology,analysis,investigation,data_curation ,writing,editing,visualization,supervision,administration,funding
+Richard J.,Telford,,richard.telford@uib.no,0000-0001-9826-3076,,,,"Department of Biosciences, University of Bergen, Postbox 7803 N-5020, Bergen, Norway",,NA,1,1,NA,1,1,1,1,NA,NA,NA
+Vigdis,Vandvik,,vigdis.vandvik@uib.no,0000-0003-4651-4798,,,,"Department of Biosciences, University of Bergen, Postbox 7803 N-5020, Bergen, Norway",,1,1,NA,1,NA,NA,1,NA,NA,NA,NA
+Liv Guri,Velle,,liv.guri.velle@moreforsking.no,0000-0003-0433-5337,,,,"Møreforsking AS Ålesund: Alesund, Norway",,1,1,NA,1,NA,NA,1,NA,NA,NA,NA
+A. N. ,Other,,,,,,,,,1,1,1,1,1,1,1,1,1,1,1
