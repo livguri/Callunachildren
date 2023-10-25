@@ -9,7 +9,7 @@ library(tarchetypes) # Load other packages as needed.
 
 # Set target options:
 tar_option_set(
-  packages = c("here", "readxl", "dplyr", "ggplot2", "stringr", "forcats", "tidyr"), # packages that your targets need to run
+  packages = c("here", "readxl", "dplyr", "ggplot2", "stringr", "forcats", "tidyr", "rjt.misc"), # packages that your targets need to run
   format = "rds" # default storage format
   # Set other options as needed.
 )
@@ -52,6 +52,16 @@ list(
     command = here("data", "Metadata.xlsx"),
     format = "file"
   ),
+  tar_target(
+    name = chelsa_gdd5_data,
+    command = here("data", "CHELSA_gdd5_1981-2010_V.2.1.tif"),
+    format = "file"
+  ),
+  tar_target(
+    name = authors,
+    command = here("authors.csv"),
+    format = "file"
+  ),
   # import data
   tar_target(
     name = biomass,
@@ -59,7 +69,7 @@ list(
   ),
   tar_target(
     name = metadata,
-    command = load_metadata(metadata_data)
+    command = load_metadata(metadata_data, chelsa_gdd5_data)
   ),
   tar_target(
     name = commongarden,
@@ -71,7 +81,7 @@ list(
   ),
   tar_target(
     name = garden_location,
-    command = tibble(Long = 5.046309, Lat = 61.293201, Site = "Garden")
+    command = tibble(long = 5.046309, lat = 61.293201, site = "Garden", code = "Garden")
   ),
 
   # combine & process datasets
@@ -102,9 +112,29 @@ list(
     command = plot_height(calluna_height_thin)
   ),
 
+  ## bibliography
+  tar_target(
+    name = biblio,
+    command = "extra/calluna.bib",
+    format = "file"
+  ),
+  tar_target(
+    name = biblio2,
+    #add extra packages to bibliography
+    command = package_citations(
+      packages = c("targets", "tidyverse", "quarto", "renv", "lmerTest"), 
+      old_bib = biblio, 
+      new_bib = "extra/calluna2.bib"),
+    format = "file"
+  ),
   ## manuscript
+  tar_target(
+    name = plume_authors,
+    command = plume::Plume$new(readr::read_csv(authors), credit_roles = TRUE)
+  ),
   tar_quarto(
     name = manuscript,
-    path = "calluna6000.qmd"
+    path = "calluna6000.qmd",
+    extra_files = c("extra/elsevier-harvard_rjt.csl", "extra/calluna2.bib")
   )
 )
